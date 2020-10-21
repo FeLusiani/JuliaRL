@@ -1,2 +1,3 @@
 .ipynb_checkpoints
-./dev/*
+*/dev/*
+*/.ipynb_checkpoints/*
