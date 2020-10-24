@@ -309,6 +309,14 @@ git-tree-sha1 = "a42c0f138b9ebe8b58eba2271c5053773bde52d0"
 uuid = "e7412a2a-1a6e-54c0-be00-318e2571c051"
 version = "1.3.4+2"
 
+[[OpenAIGym]]
+deps = ["PyCall", "Reexport", "Reinforce"]
+git-tree-sha1 = "e6df6f2e9219095b79a7a47f551108ee3b7954f8"
+repo-rev = "master"
+repo-url = "https://github.com/JuliaML/OpenAIGym.jl.git"
+uuid = "41d6fcb8-dd24-11e8-2536-c3dc023218b5"
+version = "0.1.0"
+
 [[OpenSSL_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "71bbbc616a1d710879f5a1021bcba65ffba6ce58"
@@ -369,6 +377,12 @@ version = "1.6.12"
 [[Printf]]
 deps = ["Unicode"]
 uuid = "de0858da-6303-5e67-8744-51eddeeeb8d7"
+
+[[PyCall]]
+deps = ["Conda", "Dates", "Libdl", "LinearAlgebra", "MacroTools", "Serialization", "VersionParsing"]
+git-tree-sha1 = "b6dff5fa725eff4f775f472acd86756d6e31fb02"
+uuid = "438e738f-606a-5dbb-bf0a-cddfbfd45ab0"
+version = "1.92.1"
 
 [[QuadGK]]
 deps = ["DataStructures", "LinearAlgebra"]
@@ -533,10 +547,10 @@ uuid = "c2297ded-f4af-51ae-bb23-16f91089e4e1"
 version = "1.2.1"
 
 [[ZeroMQ_jll]]
-deps = ["Libdl", "Pkg"]
-git-tree-sha1 = "733352667c60ce39dfd3017db9b798b288c87417"
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
+git-tree-sha1 = "bba617292e040408cb72baa03c20f43583bf239f"
 uuid = "8f1865be-045e-5c20-9c9f-bfbfb0764568"
-version = "4.3.2+4"
+version = "4.3.2+5"
 
 [[Zlib_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
