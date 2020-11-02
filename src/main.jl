@@ -2,6 +2,11 @@
 
 # Pkg.add(PackageSpec(url="https://github.com/JuliaML/OpenAIGym.jl.git"))
 
+# Deterministic policy that is solving the problem
+mutable struct BasicPolicy <: Reinforce.AbstractPolicy end
+
+Reinforce.action(policy::BasicPolicy, r, s, A) = random(A)
+
 using OpenAIGym
 env = GymEnv(:BipedalWalker, :v3)
 for i ∈ 1:20
