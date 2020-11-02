@@ -1,0 +1,3 @@
+[deps]
+OpenAIGym = "41d6fcb8-dd24-11e8-2536-c3dc023218b5"
+PyCall = "438e738f-606a-5dbb-bf0a-cddfbfd45ab0"

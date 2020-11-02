@@ -3,7 +3,7 @@
 # Pkg.add(PackageSpec(url="https://github.com/JuliaML/OpenAIGym.jl.git"))
 
 using OpenAIGym
-env = GymEnv(:BipedalWalker, :v2)
+env = GymEnv(:BipedalWalker, :v3)
 for i ∈ 1:20
   T = 0
   R = run_episode(env, RandomPolicy()) do (s, a, r, s′)
