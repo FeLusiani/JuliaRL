@@ -1,7 +1,11 @@
 [deps]
+BSON = "fbb218c0-5317-5bc6-957e-2ee96dd4b1f0"
+Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
 Flux = "587475ba-b771-5e3f-ad9e-33799f191a9c"
+Logging = "56ddb016-857b-54e1-b83d-db4d58db5568"
 OpenAIGym = "41d6fcb8-dd24-11e8-2536-c3dc023218b5"
 PyCall = "438e738f-606a-5dbb-bf0a-cddfbfd45ab0"
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 ReinforcementLearning = "158674fc-8238-5cab-b5ba-03dfc80d1318"
 ReinforcementLearningEnvironments = "25e41dd2-4622-11e9-1641-f1adca772921"
+TensorBoardLogger = "899adc3e-224a-11e9-021f-63837185c80f"

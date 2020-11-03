@@ -48,6 +48,7 @@ agent = Agent(
 experiment     = E`JuliaRL_BasicDQN_CartPole`
 # agent          = experiment.agent
 # env            = experiment.env
+# https://github.com/JuliaReinforcementLearning/ReinforcementLearningZoo.jl/blob/master/src/experiments/rl_envs.jl
 stop_condition = StopAfterStep(100_000)
 hook           = TotalRewardPerEpisode()
 

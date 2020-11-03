@@ -12,6 +12,6 @@ Flux.testmode!(agent)
 stop_condition = StopAfterStep(10_000)
 disp_hook = DoEveryNStep(1) do t, agent, env
     env.env.pyenv.render()
-    end
+end
 
 run(agent, env, stop_condition, disp_hook)
