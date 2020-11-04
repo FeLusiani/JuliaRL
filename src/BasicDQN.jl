@@ -8,7 +8,7 @@ using Dates
 using Logging
 using BSON
 
-duration = 10_000
+duration = 100_000
 
 save_dir = nothing
 
@@ -19,13 +19,18 @@ The testing environment is LunarLander-v2.
 
 if isnothing(save_dir)
     t = Dates.format(now(), "yyyy_mm_dd_HH_MM_SS")
-    save_dir = joinpath(pwd(), "checkpoints", "JuliaRL_BasicDQN_LunarLander_$(t)")
+    save_dir = joinpath(pwd(), "checkpoints", "BasicDQN_Lander")
+end
+
+if isdir(save_dir)
+    rm(save_dir; force=true, recursive=true)
 end
 
 lg = TBLogger(joinpath(save_dir, "tb_log"), min_level = Logging.Info)
 rng = MersenneTwister(123)
 
 inner_env = RLEnvs.GymEnv("LunarLander-v2")
+
 env = inner_env |> ActionTransformedEnv(a -> a-1)
 RLBase.get_actions(env::typeof(env)) = 1:4
 

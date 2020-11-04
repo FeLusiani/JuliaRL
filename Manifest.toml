@@ -459,17 +459,6 @@ git-tree-sha1 = "5e04374019448f8509349948ab504f117e3b575a"
 uuid = "2ee39098-c373-598a-b85f-a56591580800"
 version = "1.3.0"
 
-[[LearnBase]]
-git-tree-sha1 = "a0d90569edd490b82fdc4dc078ea54a5a800d30a"
-uuid = "7f8f8fb0-2700-5f03-b4bd-41f8cfc144b6"
-version = "0.4.1"
-
-[[LearningStrategies]]
-deps = ["LearnBase", "LinearAlgebra", "Statistics", "Test"]
-git-tree-sha1 = "16e2a9be7294ce4c73bee4e34c655614149dd879"
-uuid = "4e8a8231-0ba9-591b-8620-81c6740d7791"
-version = "0.4.0"
-
 [[LibGit2]]
 deps = ["Printf"]
 uuid = "76f85450-5226-5b5a-8eaa-529ad045b433"
@@ -590,14 +579,6 @@ git-tree-sha1 = "a416e2f267e2c8729f25bcaf1ce19d2893faf393"
 uuid = "6fe1bfb0-de20-5000-8ca7-80f57d26f881"
 version = "1.3.1"
 
-[[OpenAIGym]]
-deps = ["PyCall", "Reexport", "Reinforce"]
-git-tree-sha1 = "e6df6f2e9219095b79a7a47f551108ee3b7954f8"
-repo-rev = "master"
-repo-url = "https://github.com/JuliaML/OpenAIGym.jl"
-uuid = "41d6fcb8-dd24-11e8-2536-c3dc023218b5"
-version = "0.1.0"
-
 [[OpenSpecFun_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "9db77584158d0ab52307f8c04f8e7c08ca76b5b3"
@@ -709,12 +690,6 @@ deps = ["Pkg"]
 git-tree-sha1 = "7b1d07f411bc8ddb7977ec7f377b97b158514fe0"
 uuid = "189a3867-3050-52da-a836-e630ba90ab69"
 version = "0.2.0"
-
-[[Reinforce]]
-deps = ["Distributions", "LearnBase", "LearningStrategies", "Random", "RecipesBase", "Reexport", "StatsBase"]
-git-tree-sha1 = "20eeaa7c7c9ee01efc60bc8839e7a9c8e6647996"
-uuid = "0376cc21-f8a9-5fcf-8891-fde1415a4fd3"
-version = "0.3.0"
 
 [[ReinforcementLearning]]
 deps = ["Reexport", "ReinforcementLearningBase", "ReinforcementLearningCore", "ReinforcementLearningEnvironments", "ReinforcementLearningZoo"]

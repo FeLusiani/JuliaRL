@@ -1,11 +1,15 @@
 using ReinforcementLearning
+using PyCall
+using Random
+using ReinforcementLearningEnvironments
 using Flux
 
 inner_env = RLEnvs.GymEnv("LunarLander-v2")
 env = inner_env |> ActionTransformedEnv(a -> a-1)
 RLBase.get_actions(env::typeof(env)) = 1:4
 
-agent = RLCore.load("/home/ubuntu/JuliaRL/checkpoints/JuliaRL_BasicDQN_CartPole_2020_11_02_23_16_11", Agent)
+
+agent = RLCore.load("/home/ubuntu/JuliaRL/checkpoints/BasicDQN_Lander", Agent)
 
 Flux.testmode!(agent)
 
