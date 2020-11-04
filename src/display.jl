@@ -4,12 +4,15 @@ using Random
 using ReinforcementLearningEnvironments
 using Flux
 
+include("./conf.jl")
+
 inner_env = RLEnvs.GymEnv("LunarLander-v2")
 env = inner_env |> ActionTransformedEnv(a -> a-1)
-RLBase.get_actions(env::typeof(env)) = 1:4
+RLBase.get_actions(::typeof(env)) where {T} = 1:4
 
-
-agent = RLCore.load("/home/ubuntu/JuliaRL/checkpoints/BasicDQN_Lander", Agent)
+println("Experiment:")
+experiment = readline()
+agent = RLCore.load("/home/ubuntu/JuliaRL/checkpoints/$experiment", Agent)
 
 Flux.testmode!(agent)
 

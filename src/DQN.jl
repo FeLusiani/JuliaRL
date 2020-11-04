@@ -7,62 +7,31 @@ using TensorBoardLogger
 using Dates
 using Logging
 using BSON
+include("./conf.jl")
+include("./shared.jl")
 
-duration = 1_000_000
+duration = 100_000
+name = "DQN"
 
-save_dir = nothing
-
-description = """
-This experiment uses three dense layers to approximate the Q value.
-The testing environment is LunarLander-v2.
-"""
-
-if isnothing(save_dir)
-    t = Dates.format(now(), "yyyy_mm_dd_HH_MM_SS")
-    save_dir = joinpath(pwd(), "checkpoints", "DQN_Lander")
-end
-
-if isdir(save_dir)
-    rm(save_dir; force=true, recursive=true)
-end
+save_dir = make_save_dir(name)
 
 lg = TBLogger(joinpath(save_dir, "tb_log"), min_level = Logging.Info)
 rng = MersenneTwister(123)
 
 inner_env = RLEnvs.GymEnv("LunarLander-v2")
-
 env = inner_env |> ActionTransformedEnv(a -> a-1)
-RLBase.get_actions(env::typeof(env)) = 1:4
-
+RLBase.get_actions(::typeof(env)) = 1:4
 ns, na = length(get_state(env)), length(get_actions(env))
-
-NNA = NeuralNetworkApproximator(
-    model = Chain(
-        Dense(ns, 128, relu; initW = glorot_uniform(rng)),
-        Dense(128, 128, relu; initW = glorot_uniform(rng)),
-        Dense(128, na; initW = glorot_uniform(rng)),
-    )
-)
 
 agent = Agent(
         policy = QBasedPolicy(
             learner = DQNLearner(
                 approximator = NeuralNetworkApproximator(
-                    model = Chain(
-                        Dense(ns, 64, relu; initW = glorot_uniform(rng)),
-                        Dense(64, 64, relu; initW = glorot_uniform(rng)),
-                        Dense(64, 32, relu; initW = glorot_uniform(rng)),
-                        Dense(32, na; initW = glorot_uniform(rng)),
-                    ) |> cpu,
+                    model = net_model(ns, na),
                     optimizer = ADAM(),
                 ),
                 target_approximator = NeuralNetworkApproximator(
-                    model = Chain(
-                        Dense(ns, 64, relu; initW = glorot_uniform(rng)),
-                        Dense(64, 64, relu; initW = glorot_uniform(rng)),
-                        Dense(64, 32, relu; initW = glorot_uniform(rng)),
-                        Dense(32, na; initW = glorot_uniform(rng)),
-                    ) |> cpu,
+                    model = net_model(ns, na),
                 ),
                 loss_func = huber_loss,
                 stack_size = nothing,
@@ -88,7 +57,6 @@ agent = Agent(
 )
 
 stop_condition = StopAfterStep(duration)
-
 total_reward_per_episode = TotalRewardPerEpisode()
 time_per_step = TimePerStep()
 hook = ComposedHook(
@@ -103,11 +71,11 @@ hook = ComposedHook(
     end,
     DoEveryNEpisode() do t, agent, env
         with_logger(lg) do
-            @info "training" reward = total_reward_per_episode.rewards[end] log_step_increment =
-                0
+            @info "training" reward = total_reward_per_episode.rewards[end]
+            log_step_increment = 0
         end
     end,
-    DoEveryNStep(duration) do t, agent, env
+    DoEveryNStep(div(duration,5)) do t, agent, env
         RLCore.save(save_dir, agent)
         BSON.@save joinpath(save_dir, "stats.bson") total_reward_per_episode time_per_step
     end,
