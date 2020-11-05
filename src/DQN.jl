@@ -10,7 +10,7 @@ using BSON
 include("./conf.jl")
 include("./shared.jl")
 
-duration = 100_000
+
 name = "DQN"
 
 save_dir = make_save_dir(name)
@@ -18,9 +18,7 @@ save_dir = make_save_dir(name)
 lg = TBLogger(joinpath(save_dir, "tb_log"), min_level = Logging.Info)
 rng = MersenneTwister(123)
 
-inner_env = RLEnvs.GymEnv("LunarLander-v2")
-env = inner_env |> ActionTransformedEnv(a -> a-1)
-RLBase.get_actions(::typeof(env)) = 1:4
+env = LunarLander()
 ns, na = length(get_state(env)), length(get_actions(env))
 
 agent = Agent(
@@ -56,7 +54,7 @@ agent = Agent(
         ),
 )
 
-stop_condition = StopAfterStep(duration)
+stop_condition = StopAfterStep(Conf.duration)
 total_reward_per_episode = TotalRewardPerEpisode()
 time_per_step = TimePerStep()
 hook = ComposedHook(
@@ -75,7 +73,7 @@ hook = ComposedHook(
             log_step_increment = 0
         end
     end,
-    DoEveryNStep(div(duration,5)) do t, agent, env
+    DoEveryNStep(div(Conf.duration,5)) do t, agent, env
         RLCore.save(save_dir, agent)
         BSON.@save joinpath(save_dir, "stats.bson") total_reward_per_episode time_per_step
     end,

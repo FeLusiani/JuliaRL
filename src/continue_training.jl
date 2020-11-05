@@ -8,10 +8,9 @@ include("./conf.jl")
 include("./shared.jl")
 
 env = LunarLander()
+agent = RLCore.load(ENV["save_dir"], Agent)
 
-agent = RLCore.load(Conf.save_dir, Agent)
-
-Flux.testmode!(agent)
+Flux.trainmode!(agent)
 
 stop_condition = StopAfterStep(Conf.duration)
 disp_hook = DoEveryNStep(1) do t, agent, env

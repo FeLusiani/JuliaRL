@@ -1,9 +1,15 @@
 using ReinforcementLearning
 using Flux
+using Dates
+
+function LunarLander()
+    inner_env = RLEnvs.GymEnv("LunarLander-v2")
+    env = inner_env |> ActionTransformedEnv(a -> a-1;mapping= a -> a+1)
+end
 
 function make_save_dir(name::T) where {T<:AbstractString}
-    save_dir = joinpath(pwd(), "checkpoints", "$name")
-    # t = Dates.format(now(), "HH_MM_SS")
+    t = Dates.format(now(), "yyyy_mm_dd_HH_MM_SS")
+    save_dir = joinpath(pwd(), "checkpoints", "$name_$t")
     
     if isdir(save_dir)
         rm(save_dir; force=true, recursive=true)
