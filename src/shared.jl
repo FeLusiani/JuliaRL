@@ -8,8 +8,8 @@ function LunarLander()
 end
 
 function make_save_dir(name::T) where {T<:AbstractString}
-    t = Dates.format(now(), "yyyy_mm_dd_HH_MM_SS")
-    save_dir = joinpath(pwd(), "checkpoints", "$name_$t")
+    # t = Dates.format(now(), "yyyy_mm_dd_HH_MM_SS")
+    save_dir = joinpath(pwd(), "checkpoints", "$name")
     
     if isdir(save_dir)
         rm(save_dir; force=true, recursive=true)

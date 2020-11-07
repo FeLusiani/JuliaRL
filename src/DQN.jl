@@ -33,22 +33,22 @@ agent = Agent(
                 ),
                 loss_func = huber_loss,
                 stack_size = nothing,
-                batch_size = 64,
+                batch_size = Conf.batch_size,
                 update_horizon = 1,
-                min_replay_history = 100,
-                update_freq = 4,
-                target_update_freq = 100,
+                min_replay_history = Conf.min_replay_history,
+                update_freq = Conf.update_freq,
+                target_update_freq = Conf.target_update_freq,
                 rng = rng,
             ),
             explorer = EpsilonGreedyExplorer(
                 kind = :exp,
                 ϵ_stable = 0.01,
-                decay_steps = 50_000,
+                decay_steps = Conf.decay_steps,
                 rng = rng,
             ),
         ),
         trajectory = CircularCompactSARTSATrajectory(
-            capacity = 100_000,
+            capacity = Conf.capacity,
             state_type = Float32,
             state_size = (ns,),
         ),
@@ -70,16 +70,16 @@ hook = ComposedHook(
     DoEveryNEpisode() do t, agent, env
         with_logger(lg) do
             @info "training" reward = total_reward_per_episode.rewards[end]
-            log_step_increment = 0
+            # log_step_increment = 0
         end
     end,
-    DoEveryNStep(div(Conf.duration,5)) do t, agent, env
+    DoEveryNStep(Conf.save_freq) do t, agent, env
         RLCore.save(save_dir, agent)
         BSON.@save joinpath(save_dir, "stats.bson") total_reward_per_episode time_per_step
     end,
 )
 
 
-run(agent, env, stop_condition, hook)
+@time run(agent, env, stop_condition, hook)
 
 
