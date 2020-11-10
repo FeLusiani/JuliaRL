@@ -12,7 +12,7 @@ include("./conf.jl")
 include("./shared.jl")
 
 
-name = "DQN2"
+name = "PDQN"
 
 save_dir = make_save_dir(name)
 
@@ -24,7 +24,7 @@ ns, na = length(get_state(env)), length(get_actions(env))
 
 agent = Agent(
     policy = QBasedPolicy(
-        learner = DQNLearner(
+        learner = PrioritizedDQNLearner(
             approximator = NeuralNetworkApproximator(
                 model = net_model(ns, na),
                 optimizer = ADAM(),
@@ -49,7 +49,7 @@ agent = Agent(
             rng = rng,
         ),
     ),
-    trajectory = CircularCompactSARTSATrajectory(
+    trajectory = CircularCompactPSARTSATrajectory(
         capacity = Conf.capacity,
         state_type = Float32,
         state_size = (ns,),
@@ -87,5 +87,3 @@ hook = ComposedHook(
 
 infos = @timeRet run(agent, env, stop_condition, hook)
 open(f->write(f, infos, string(agent)), joinpath(save_dir, "performance.txt"), "w")
-
-

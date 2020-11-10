@@ -1,12 +1,14 @@
 module Conf
 
 # BasicDQN
-duration = 100_000
-batch_size = 32
-min_replay_history = 100
-decay_steps = div(duration,10)
-capacity = div(duration,10)
-save_freq = div(duration,1)
+duration = 150_000
+batch_size = 64
+min_replay_history = 100#div(duration,500) #100#400
+decay_steps = 3000#div(duration,40) #3000#2000
+capacity = div(duration,1)
+save_freq = div(duration,2)
+
+# 1000-400 no
 
 # DQN
 update_freq = 4

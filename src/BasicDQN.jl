@@ -7,6 +7,7 @@ using TensorBoardLogger
 using Dates
 using Logging
 using BSON
+using Suppressor
 include("./conf.jl")
 include("./shared.jl")
 
@@ -49,20 +50,22 @@ agent = Agent(
 
 stop_condition = StopAfterStep(Conf.duration)
 
+global episode_loss = 0
 total_reward_per_episode = TotalRewardPerEpisode()
 time_per_step = TimePerStep()
 hook = ComposedHook(
     total_reward_per_episode,
     time_per_step,
     DoEveryNStep() do t, agent, env
-        with_logger(lg) do
-            @info "training" loss = agent.policy.learner.loss
-        end
+        global episode_loss += loss = agent.policy.learner.loss
     end,
     DoEveryNEpisode() do t, agent, env
         with_logger(lg) do
+            global episode_loss
+            @info "training" loss = episode_loss
             @info "training" reward = total_reward_per_episode.rewards[end]
             log_step_increment = 0
+            episode_loss = 0
         end
     end,
     DoEveryNStep(Conf.save_freq) do t, agent, env
@@ -72,7 +75,8 @@ hook = ComposedHook(
 )
 
 
-@time run(agent, env, stop_condition, hook)
+infos = @timeRet run(agent, env, stop_condition, hook)
+open(f->write(f, infos), joinpath(save_dir, "performance.txt"), "w")
 
 
 
