@@ -63,7 +63,6 @@ end
 function shallow_net_model(ns::Int, na::Int)
     Chain(
         Dense(ns, 128, leakyrelu; initW = glorot_uniform(rng)),
-        Dense(128, 128, leakyrelu; initW = glorot_uniform(rng)),
         Dense(128, 64, leakyrelu; initW = glorot_uniform(rng)),
         Dense(64, na; initW = glorot_uniform(rng)),
     ) |> cpu
