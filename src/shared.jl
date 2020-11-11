@@ -3,9 +3,40 @@ using Flux
 using Dates
 using Suppressor
 
-function LunarLander()
-    inner_env = RLEnvs.GymEnv("LunarLander-v2")
-    env = inner_env |> ActionTransformedEnv(a -> a-1;mapping= a -> a+1)
+function pyenv2env(pyenv::PyObject)
+    obs_space = convert(AbstractSpace, pyenv.observation_space)
+    act_space = convert(AbstractSpace, pyenv.action_space)
+    obs_type = if obs_space isa Union{MultiContinuousSpace,MultiDiscreteSpace}
+        PyArray
+    elseif obs_space isa ContinuousSpace
+        Float64
+    elseif obs_space isa DiscreteSpace
+        Int
+    elseif obs_space isa VectSpace
+        PyVector
+    elseif obs_space isa DictSpace
+        PyDict
+    else
+        error("don't know how to get the observation type from observation space of $obs_space")
+    end
+    env = GymEnv{obs_type,typeof(act_space),typeof(obs_space),typeof(pyenv)}(
+        pyenv,
+        obs_space,
+        act_space,
+        PyNULL(),
+    )
+    reset!(env) # reset immediately to init env.state
+    env
+end
+
+
+
+function LunarLander(;particles=false)
+    gym = pyimport("CustomGym")
+    gym = pyimport("importlib").reload(gym.lunar_lander)
+    gym.LunarLander(particles) |>
+    pyenv2env |>
+    ActionTransformedEnv(a -> a-1;mapping= a -> a+1)
 end
 
 function make_save_dir(name::T) where {T<:AbstractString}
@@ -29,12 +60,12 @@ function net_model(ns::Int, na::Int)
     ) |> cpu
 end
 
-function small_net_model(ns::Int, na::Int)
+function shallow_net_model(ns::Int, na::Int)
     Chain(
-        Dense(ns, 32, leakyrelu; initW = glorot_uniform(rng)),
-        Dense(32, 32, leakyrelu; initW = glorot_uniform(rng)),
-        Dense(32, 16, leakyrelu; initW = glorot_uniform(rng)),
-        Dense(16, na; initW = glorot_uniform(rng)),
+        Dense(ns, 128, leakyrelu; initW = glorot_uniform(rng)),
+        Dense(128, 128, leakyrelu; initW = glorot_uniform(rng)),
+        Dense(128, 64, leakyrelu; initW = glorot_uniform(rng)),
+        Dense(64, na; initW = glorot_uniform(rng)),
     ) |> cpu
 end
 
@@ -57,3 +88,4 @@ macro timeRet(ex)
         output
     end
 end
+

@@ -15,7 +15,7 @@ else
 end
     
 
-env = LunarLander()
+env = LunarLander(;particles=true)
 
 agent = RLCore.load(save_dir, Agent)
 
