@@ -1,4 +1,5 @@
 using ReinforcementLearning
+using ReinforcementLearningEnvironments
 using Flux
 using Dates
 using Suppressor
@@ -25,18 +26,21 @@ function pyenv2env(pyenv::PyObject)
         act_space,
         PyNULL(),
     )
-    reset!(env) # reset immediately to init env.state
+    RLBase.reset!(env) # reset immediately to init env.state
     env
 end
 
 
 
-function LunarLander(;particles=false)
+function LunarLander(;)
+    # standard gym LunarLander:
+    # env = GymEnv("LunarLander-v2")
     gym = pyimport("CustomGym")
     gym = pyimport("importlib").reload(gym.lunar_lander)
-    gym.LunarLander(particles) |>
+    gym.LunarLander() |>
     pyenv2env |>
     ActionTransformedEnv(a -> a-1;mapping= a -> a+1)
+
 end
 
 function make_save_dir(name::T) where {T<:AbstractString}

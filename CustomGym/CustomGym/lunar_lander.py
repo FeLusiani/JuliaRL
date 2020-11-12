@@ -11,7 +11,11 @@ making the environment faster.
 In Gym, the time limit is managed at the EnvSpec level.
 This environment is not registered with register()
 and thus needs to set and manage the time limit by itself.
- 
+
+- Reward
+Crashing & Landing -> x LANDING_FACTOR
+First leg down is right -> + LEG_FIRST_BONUS
+First leg down is left -> - LEG_FIRST_BONUS
 """
 
 
@@ -25,7 +29,11 @@ import gym
 from gym import spaces
 from gym.utils import seeding, EzPickle
 
+
 MAX_EPISODE_STEPS = 1000
+# change reward using these constants
+LANDING_FACTOR = 1
+LEG_FIRST_BONUS = 0
 
 FPS = 50
 SCALE = 30.0   # affects how fast-paced the game is, forces should be adjusted as well
@@ -59,9 +67,19 @@ class ContactDetector(contactListener):
     def BeginContact(self, contact):
         if self.env.lander == contact.fixtureA.body or self.env.lander == contact.fixtureB.body:
             self.env.game_over = True
-        for i in range(2):
+        
+        if self.env.legs[0] in [contact.fixtureA.body, contact.fixtureB.body]:
+            self.env.legs[0].ground_contact = True
+            if self.env.leg_down == 0:
+                self.env.leg_down = -1
+        
+        if self.env.legs[1] in [contact.fixtureA.body, contact.fixtureB.body]:
+            self.env.legs[1].ground_contact = True
+            if self.env.leg_down == 0:
+                self.env.leg_down = 1
+            """         for i in range(2):
             if self.env.legs[i] in [contact.fixtureA.body, contact.fixtureB.body]:
-                self.env.legs[i].ground_contact = True
+                self.env.legs[i].ground_contact = True """
 
     def EndContact(self, contact):
         for i in range(2):
@@ -77,9 +95,9 @@ class LunarLander(gym.Env, EzPickle):
 
     continuous = False
 
-    def __init__(self, use_particles=False):
+    def __init__(self):
         EzPickle.__init__(self)
-        self.use_particles = use_particles
+        self.use_particles = False
         self.seed()
         self.viewer = None
 
@@ -90,6 +108,8 @@ class LunarLander(gym.Env, EzPickle):
 
         self.prev_reward = None
         self.n_steps = 0
+         # 1 when right is put down and left is up, -1 when left is put down and right is up
+        self.leg_down = 0
 
         # useful range is -1 .. +1, but spikes can be higher
         self.observation_space = spaces.Box(-np.inf, np.inf, shape=(8,), dtype=np.float32)
@@ -314,6 +334,7 @@ class LunarLander(gym.Env, EzPickle):
 
         reward = 0
         shaping = \
+            + self.leg_down*LEG_FIRST_BONUS \
             - 100*np.sqrt(state[0]*state[0] + state[1]*state[1]) \
             - 100*np.sqrt(state[2]*state[2] + state[3]*state[3]) \
             - 100*abs(state[4]) + 10*state[6] + 10*state[7]  # And ten points for legs contact, the idea is if you
@@ -324,19 +345,24 @@ class LunarLander(gym.Env, EzPickle):
 
         reward -= m_power*0.30  # less fuel spent is better, about -30 for heuristic landing
         reward -= s_power*0.03
+        # reward += self.leg_down*LEG_FIRST_BONUS
+        # self.leg_down = 0
 
         done = False
         if self.game_over or abs(state[0]) >= 1.0:
             done = True
-            reward = -100
+            reward = -100*LANDING_FACTOR
         if not self.lander.awake:
             done = True
-            reward = +100
+            reward = +100*LANDING_FACTOR
         if self.n_steps > MAX_EPISODE_STEPS:
             done = True
         return np.array(state, dtype=np.float32), reward, done, {}
 
     def render(self, mode='human'):
+        if self.use_particles is False:
+            self.use_particles = True
+
         from gym.envs.classic_control import rendering
         if self.viewer is None:
             self.viewer = rendering.Viewer(VIEWPORT_W, VIEWPORT_H)
