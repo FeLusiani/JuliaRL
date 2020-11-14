@@ -1,21 +1,28 @@
+#JuliaRL/src/conf.jl
+
+# Configuration values for the DQN algorithms are defined here
 module Conf
 
-# BasicDQN
-duration = 200_000
+# BasicDQN, DQN, PDQN
+
+# duration in steps of the training
+duration = 150_000
+# size of mini-batches
 batch_size = 64
-min_replay_history = 400#div(duration,500) #100#400
-decay_steps = 2000#div(duration,40) #3000#2000
-capacity = div(duration,1)
+# number of transitions that should be experienced before updating the approximator
+min_replay_history = 100
+# decay_steps for EpsilonGreedyExplorer
+decay_steps = 3000
+# capacity (in steps) of the experience buffer
+capacity = duration
+# frequency at which the agent is saved during training
 save_freq = div(duration,2)
 
-# 1000-400 no
+# DQN, PDQN
 
-# DQN
+# the frequency of updating the approximator
 update_freq = 4
+# the frequency of updating the target
 target_update_freq = 100
-# RLmodel = "BasicDQN"
-# save_dir = "/home/ubuntu/JuliaRL/checkpoints/"
 
 end
-
-# ENV["save_dir"]

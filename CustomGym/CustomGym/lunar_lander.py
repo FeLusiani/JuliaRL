@@ -1,11 +1,11 @@
 """
 A modified version of Oleg Klimov's Lunar Lander environment (from OpenAI Gym).
+See https://github.com/openai/gym/blob/master/gym/envs/box2d/lunar_lander.py
 
 Changes:
-- Optional particles
-Environment constructor now takes an optional `use_particles` argument.
-If False (default value), aesthetic particles won't be generated,
-making the environment faster.
+- Improved performance
+Particles are generated only when the environment is rendered,
+improving the performance during training.
 
 - MAX_EPSIODE_STEPS costant
 In Gym, the time limit is managed at the EnvSpec level.
@@ -32,8 +32,8 @@ from gym.utils import seeding, EzPickle
 
 MAX_EPISODE_STEPS = 1000
 # change reward using these constants
-LANDING_FACTOR = 1
-LEG_FIRST_BONUS = 0
+LANDING_FACTOR = 5
+LEG_FIRST_BONUS = 50
 
 FPS = 50
 SCALE = 30.0   # affects how fast-paced the game is, forces should be adjusted as well
@@ -72,11 +72,13 @@ class ContactDetector(contactListener):
             self.env.legs[0].ground_contact = True
             if self.env.leg_down == 0:
                 self.env.leg_down = -1
+                # print("Bad leg!")
         
         if self.env.legs[1] in [contact.fixtureA.body, contact.fixtureB.body]:
             self.env.legs[1].ground_contact = True
             if self.env.leg_down == 0:
                 self.env.leg_down = 1
+                # print("Good leg!")
             """         for i in range(2):
             if self.env.legs[i] in [contact.fixtureA.body, contact.fixtureB.body]:
                 self.env.legs[i].ground_contact = True """
@@ -142,6 +144,7 @@ class LunarLander(gym.Env, EzPickle):
 
     def reset(self):
         self.n_steps = 0
+        self.leg_down = 0
         self._destroy()
         self.world.contactListener_keepref = ContactDetector(self)
         self.world.contactListener = self.world.contactListener_keepref
