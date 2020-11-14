@@ -38,7 +38,7 @@ function runDQN(save_dir::T) where {T<:AbstractString}
                     model = net_model(ns, na, rng),
                     optimizer = ADAM(),
                 ),
-                loss_func = huber_loss_unreduced,
+                loss_func = huber_loss,
                 stack_size = nothing,
                 batch_size = Conf.batch_size,
                 update_horizon = 1,
