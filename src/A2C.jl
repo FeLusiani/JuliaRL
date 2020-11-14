@@ -20,7 +20,10 @@ include("./shared.jl")
 Train an agent using A2C learning.
 Results will be saved at `save_dir`.
 """
-function runA2C(save_dir::T) where {T<:AbstractString}
+function runA2C(save_dir::T) where {T<:AbstractString}    
+    # clear save_dir directory
+    isdir(save_dir) && rm(save_dir; force=true, recursive=true)
+    
     lg = TBLogger(joinpath(save_dir, "tb_log"), min_level = Logging.Info)
     rng = MersenneTwister(123)
 

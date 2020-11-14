@@ -32,8 +32,8 @@ from gym.utils import seeding, EzPickle
 
 MAX_EPISODE_STEPS = 1000
 # change reward using these constants
-LANDING_FACTOR = 5
-LEG_FIRST_BONUS = 50
+LANDING_FACTOR = 1
+LEG_FIRST_BONUS = 0
 
 FPS = 50
 SCALE = 30.0   # affects how fast-paced the game is, forces should be adjusted as well

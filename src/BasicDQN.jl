@@ -13,6 +13,7 @@ using Suppressor
 include("./conf.jl")
 include("./shared.jl")
 
+
 """
     runBasicDQN(save_dir)
 
@@ -20,6 +21,9 @@ Train an agent using BasicDQN learning.
 Results will be saved at `save_dir`.
 """
 function runBasicDQN(save_dir::T) where {T<:AbstractString}
+    # clear save_dir directory
+    isdir(save_dir) && rm(save_dir; force=true, recursive=true)
+
     lg = TBLogger(joinpath(save_dir, "tb_log"), min_level = Logging.Info)
     rng = MersenneTwister(123)
 

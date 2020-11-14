@@ -14,7 +14,6 @@ include("./conf.jl")
 include("./shared.jl")
 
 
-
 """
     runPDQN(save_dir)
 
@@ -22,6 +21,9 @@ Train an agent using PDQN learning.
 Results will be saved at `save_dir`.
 """
 function runPDQN(save_dir::T) where {T<:AbstractString}
+    # clear save_dir directory
+    isdir(save_dir) && rm(save_dir; force=true, recursive=true)
+
     lg = TBLogger(joinpath(save_dir, "tb_log"), min_level = Logging.Info)
     rng = MersenneTwister(123)
 

@@ -15,7 +15,7 @@ include("./shared.jl")
 Runs the agent saved at `save_dir`, rendering the environment,
 up to `duration` steps.
 """
-function display_agent(save_dir, duration::Int = 1000)
+function display_agent(save_dir, duration::Int = 5000)
     env = LunarLander()
     agent = RLCore.load(save_dir, Agent)
     Flux.testmode!(agent)
