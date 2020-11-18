@@ -51,7 +51,7 @@ Alternatively you can use TensorBoard (reccomended) to display the stats logged 
 ```
 $ tensorboard --logdir ./checkpoints/
 ```
-![](./img/tensorboard.gif)
+![](./img/PDQN_original.png)
 
 
 See the code for further uses.
