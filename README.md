@@ -42,6 +42,18 @@ To load the agent and see it in action:
 julia> display_agent("./checkpoints/PDQN_test/")
 ```
 
+To plot the total reward per episode you can use the `show_stats` function:
+```
+julia> show_stats("./checkpoints/PDQN_test")
+```
+
+Alternatively you can use TensorBoard (reccomended) to display the stats logged during training:
+```
+$ tensorboard --logdir ./checkpoints/
+```
+![](./img/tensorboard.gif)
+
+
 See the code for further uses.
 
 ![](./img/lunar_lander.gif)
