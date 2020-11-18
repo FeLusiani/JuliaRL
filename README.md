@@ -47,7 +47,7 @@ To plot the total reward per episode you can use the `show_stats` function:
 julia> show_stats("./checkpoints/PDQN_test")
 ```
 
-Alternatively you can use TensorBoard (reccomended) to display the stats logged during training:
+Alternatively you can use [TensorBoard](https://www.tensorflow.org/tensorboard) (recommended) to display the stats logged during training:
 ```
 $ tensorboard --logdir ./checkpoints/
 ```
