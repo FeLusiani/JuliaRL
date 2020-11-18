@@ -42,4 +42,6 @@ To load the agent and see it in action:
 julia> display_agent("./checkpoints/PDQN_test/")
 ```
 
+See the code for further uses.
+
 ![](./img/lunar_lander.gif)
