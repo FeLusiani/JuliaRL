@@ -3,6 +3,8 @@
 This is the code I developed for my Bachelor's thesis work *Reinforcement Learning in Julia, using a multi-objective environment*.
 I use the [ReinforcementLearning.jl](https://github.com/JuliaReinforcementLearning/ReinforcementLearning.jl) package to apply DQN algorithms to a modified version of the [Lunar Lander](https://gym.openai.com/envs/LunarLander-v2/) environment, from the [Open AI Gym](https://github.com/openai/gym) python library. The Julia code uses the python environment through the [PyCall.jl](https://github.com/JuliaPy/PyCall.jl) package.
 
+![](./img/lunar_lander.gif)
+
 ## Installation
 Clone the progect:
 ```
@@ -55,5 +57,3 @@ $ tensorboard --logdir ./checkpoints/
 
 
 See the code for further uses.
-
-![](./img/lunar_lander.gif)
