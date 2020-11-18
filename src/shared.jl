@@ -46,12 +46,12 @@ end
 Returns a `LunarLander` environment from the `CustomGym` python module
 as a `ReinforcementLearningEnvironments.GymEnv`
 """
-function LunarLander()
+function LunarLander(landingFactor=1, legFirstBonus=0)
     gym = pyimport("CustomGym")
     # reload the python module, otherwise changes to the code
     # won't be effective until you restart julia
     gym = pyimport("importlib").reload(gym.lunar_lander)
-    gym.LunarLander() |>
+    gym.LunarLander(landing_factor=landingFactor, leg_first_bonus=legFirstBonus) |>
     pyenv2env |>
     ActionTransformedEnv(a -> a-1;mapping= a -> a+1)
 

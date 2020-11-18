@@ -13,9 +13,15 @@ This environment is not registered with register()
 and thus needs to set and manage the time limit by itself.
 
 - Reward
-Crashing & Landing -> x LANDING_FACTOR
-First leg down is right -> + LEG_FIRST_BONUS
-First leg down is left -> - LEG_FIRST_BONUS
+The LunarLander constructor now takes two optional arguments:
+    LunarLander(landing_factor=1, leg_first_bonus=0)
+
+In respect to the original environment, the reward function is changed in the following way:
+reward for crashing & landing   -> * LANDING_FACTOR
+reward for right leg down first -> + LEG_FIRST_BONUS
+reward for left leg down first  -> - LEG_FIRST_BONUS
+
+Therefore, using the deafult argument values makes the environment behave as the original one.
 """
 
 
@@ -31,9 +37,6 @@ from gym.utils import seeding, EzPickle
 
 
 MAX_EPISODE_STEPS = 1000
-# change reward using these constants
-LANDING_FACTOR = 1
-LEG_FIRST_BONUS = 0
 
 FPS = 50
 SCALE = 30.0   # affects how fast-paced the game is, forces should be adjusted as well
@@ -97,9 +100,14 @@ class LunarLander(gym.Env, EzPickle):
 
     continuous = False
 
-    def __init__(self):
+    def __init__(self, landing_factor=1, leg_first_bonus=0):
         EzPickle.__init__(self)
+        # change reward using these constants
+        self.LANDING_FACTOR = landing_factor
+        self.LEG_FIRST_BONUS = leg_first_bonus
+        # do not use particles if not rendering
         self.use_particles = False
+
         self.seed()
         self.viewer = None
 
@@ -337,7 +345,7 @@ class LunarLander(gym.Env, EzPickle):
 
         reward = 0
         shaping = \
-            + self.leg_down*LEG_FIRST_BONUS \
+            + self.leg_down*self.LEG_FIRST_BONUS \
             - 100*np.sqrt(state[0]*state[0] + state[1]*state[1]) \
             - 100*np.sqrt(state[2]*state[2] + state[3]*state[3]) \
             - 100*abs(state[4]) + 10*state[6] + 10*state[7]  # And ten points for legs contact, the idea is if you
@@ -354,10 +362,10 @@ class LunarLander(gym.Env, EzPickle):
         done = False
         if self.game_over or abs(state[0]) >= 1.0:
             done = True
-            reward = -100*LANDING_FACTOR
+            reward = -100*self.LANDING_FACTOR
         if not self.lander.awake:
             done = True
-            reward = +100*LANDING_FACTOR
+            reward = +100*self.LANDING_FACTOR
         if self.n_steps > MAX_EPISODE_STEPS:
             done = True
         return np.array(state, dtype=np.float32), reward, done, {}

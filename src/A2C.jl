@@ -15,12 +15,17 @@ include("./shared.jl")
 
 
 """
-    runA2C(save_dir)
+    runA2Csave_dir, landing_factor=1, leg_first_bonus=0)
 
-Train an agent using A2C learning.
+Trains the modified LunarLander agent using A2C
+from the ReinforcementLearning library.
 Results will be saved at `save_dir`.
+
+Using the default values for landing_factor and leg_first_bonus
+will make the environement behave like the original LunarLander.
+For more information, see the JuliaRL/CustomGym/CustomGym/lunar_lander.py file.
 """
-function runA2C(save_dir::T) where {T<:AbstractString}    
+function runA2C(save_dir::T, landing_factor=1, leg_first_bonus=0) where {T<:AbstractString}    
     # clear save_dir directory
     isdir(save_dir) && rm(save_dir; force=true, recursive=true)
     
@@ -30,7 +35,7 @@ function runA2C(save_dir::T) where {T<:AbstractString}
     N_ENV = 16
     UPDATE_FREQ = 10
     env = MultiThreadEnv([
-        LunarLander() for i in 1:N_ENV
+        LunarLander(landing_factor, leg_first_bonus) for i in 1:N_ENV
     ])
 
     ns, na = length(get_state(env[1])), length(get_actions(env[1]))

@@ -15,19 +15,24 @@ include("./shared.jl")
 
 
 """
-    runDQN(save_dir)
+    runDQN(save_dir, landing_factor=1, leg_first_bonus=0)
 
-Train an agent using DQN learning.
+Trains the modified LunarLander agent using DQN
+from the ReinforcementLearning library.
 Results will be saved at `save_dir`.
+
+Using the default values for landing_factor and leg_first_bonus
+will make the environement behave like the original LunarLander.
+For more information, see the JuliaRL/CustomGym/CustomGym/lunar_lander.py file.
 """
-function runDQN(save_dir::T) where {T<:AbstractString}    
+function runDQN(save_dir::T, landing_factor=1, leg_first_bonus=0) where {T<:AbstractString}    
     # clear save_dir directory
     isdir(save_dir) && rm(save_dir; force=true, recursive=true)
     
     lg = TBLogger(joinpath(save_dir, "tb_log"), min_level = Logging.Info)
     rng = MersenneTwister(123)
 
-    env = LunarLander()
+    env = LunarLander(landing_factor, leg_first_bonus)
     ns, na = length(get_state(env)), length(get_actions(env))
 
     agent = Agent(
