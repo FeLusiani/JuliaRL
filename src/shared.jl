@@ -77,6 +77,17 @@ function shallow_net_model(ns::Int, na::Int, rng)
 end
 
 
+function deep_net_model(ns::Int, na::Int, rng)
+    Chain(
+        Dense(ns, 64, leakyrelu; initW = glorot_uniform(rng)),
+        Dense(64, 64, leakyrelu; initW = glorot_uniform(rng)),
+        Dense(64, 64, leakyrelu; initW = glorot_uniform(rng)),
+        Dense(64, 32, leakyrelu; initW = glorot_uniform(rng)),
+        Dense(32, na; initW = glorot_uniform(rng)),
+    ) |> cpu
+end
+
+
 """
 @timeRet expr
 
