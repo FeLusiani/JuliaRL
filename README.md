@@ -15,15 +15,17 @@ $ cd ./JuliaRL
 Inside the `julia` REPL, use `]` to enter the `Pkg` REPL. Use `activate .` to activate the environment and `instantiate` to install the required dependencies.
 
 ### Installing JuliaRL/CustomGym
-To make the `JuliaRL/CustomGym` python package available to `PyCall`, you will need to install it using the [Conda.jl](https://github.com/Luthaf/Conda.jl) package. Alternatively, you can directly install it using the `pip` binary in `~/.julia/conda/3/bin/pip`:
-```
-$ $HOME/.julia/conda/3/bin/pip install -e ./JuliaRL/CustomGym
-```
+To make the `JuliaRL/CustomGym` python package available to `PyCall`, you can set `PyCall` to use the python environment created by the [Conda.jl](https://github.com/Luthaf/Conda.jl) package, and then install `CustomGym` in that environment.
 
-Note that, as explaiend in the [PyCall.jl documentation](https://github.com/JuliaPy/PyCall.jl/blob/master/README.md), in order to make PyCall use the Conda.jl python environment, you will need to set the `ENV["PYTHON"]` variable and then build the PyCall package:
+To link PyCall to the Conda.jl environment:
 ```
 ENV["PYTHON"] = ""
 Pkg.build("PyCall")
+```
+
+To install `CustomGym` in the Conda.jl environment, you can directly use the respective `pip` executable in `~/.julia/conda/3/bin/`:
+```
+$ ~/.julia/conda/3/bin/pip install -e ./JuliaRL/CustomGym
 ```
 
 ## Usage
