@@ -6,7 +6,7 @@ I use the [ReinforcementLearning.jl](https://github.com/JuliaReinforcementLearni
 ![](./img/lunar_lander.gif)
 
 ## Installation
-Clone the progect:
+Clone the project:
 ```
 $ git clone https://github.com/FeLusiani/JuliaRL
 $ cd ./JuliaRL
@@ -17,10 +17,10 @@ Inside the `julia` REPL, use `]` to enter the `Pkg` REPL. Use `activate .` to ac
 ### Installing JuliaRL/CustomGym
 To make the `JuliaRL/CustomGym` python package available to `PyCall`, you will need to install it using the [Conda.jl](https://github.com/Luthaf/Conda.jl) package. Alternatively, you can directly install it using the `pip` binary in `~/.julia/conda/3/bin/pip`:
 ```
-$ ~/.julia/conda/3/bin/pip install ~/JuliaRL/CustomGym
+$ $HOME/.julia/conda/3/bin/pip install -e ./JuliaRL/CustomGym
 ```
 
-As explaiend in the [PyCall.jl documentation](https://github.com/JuliaPy/PyCall.jl/blob/master/README.md), in order to make PyCall use the Conda.jl python environment, you will need to set the `ENV["PYTHON"]` variable and then build the PyCall package:
+Note that, as explaiend in the [PyCall.jl documentation](https://github.com/JuliaPy/PyCall.jl/blob/master/README.md), in order to make PyCall use the Conda.jl python environment, you will need to set the `ENV["PYTHON"]` variable and then build the PyCall package:
 ```
 ENV["PYTHON"] = ""
 Pkg.build("PyCall")
