@@ -20,6 +20,12 @@ To make the `JuliaRL/CustomGym` python package available to `PyCall`, you will n
 $ ~/.julia/conda/3/bin/pip install ~/JuliaRL/CustomGym
 ```
 
+As explaiend in the [PyCall.jl documentation](https://github.com/JuliaPy/PyCall.jl/blob/master/README.md), in order to make PyCall use the Conda.jl python environment, you will need to set the `ENV["PYTHON"]` variable and then build the PyCall package:
+```
+ENV["PYTHON"] = ""
+Pkg.build("PyCall")
+```
+
 ## Usage
 Inside the `julia` REPL:
 ```
